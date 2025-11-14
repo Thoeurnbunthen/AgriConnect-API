@@ -1,14 +1,17 @@
+// src/models/user.model.ts
 import mongoose, { Schema, Document } from "mongoose";
-import { IUser } from "@/types/userType";
+
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+}
 
 export interface IUserDocument extends IUser, Document {}
 
 const UserSchema: Schema<IUserDocument> = new Schema(
   {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    userName: { type: String, required: true, unique: true },
-    role: { type: String, required: true },
+    name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
   },
