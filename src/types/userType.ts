@@ -1,10 +1,15 @@
-export interface IUser {
+import mongoose, { Document, mongo } from "mongoose";
+
+export interface IUser extends Document {
   firstName: string;
   lastName: string;
-  username: string;
-  role: string;
+  userName: string;
+  role: mongoose.Types.ObjectId[];
   email: string;
   password: string;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface JwtPayloadInput {

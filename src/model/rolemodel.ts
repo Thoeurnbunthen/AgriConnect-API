@@ -1,16 +1,12 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema } from "mongoose";
+import { IRole } from "@/types/role";
 
-export interface IRole {
-  name: string; // e.g., "admin", "farmer", "customer"
-}
-
-export interface IRoleDocument extends IRole, Document {}
-
-const RoleSchema: Schema<IRoleDocument> = new Schema(
+const roleModel = new Schema<IRole>(
   {
-    name: { type: String, required: true, unique: true },
+    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    name: { type: String, required: true, unique: true }, // e.g., "admin", "farmer", "customer"
   },
   { timestamps: true }
 );
 
-export const RoleModel = mongoose.model<IRoleDocument>("Role", RoleSchema);
+export const RoleModel = mongoose.model<IRole>("Role", roleModel);
