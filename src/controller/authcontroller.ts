@@ -1,4 +1,4 @@
-import { Registerservice } from "@/services/authservice";
+import { Registerservice, Loginservice } from "@/services/authservice";
 import { Request, Response } from "express";
 /**
  * @swagger
@@ -16,10 +16,8 @@ import { Request, Response } from "express";
  *             required:
  *               - firstName
  *               - lastName
- *               - userName
  *               - email
  *               - password
- *
  *               - status
  *             properties:
  *               firstName:
@@ -28,9 +26,48 @@ import { Request, Response } from "express";
  *               lastName:
  *                 type: string
  *                 example: Doe
- *               userName:
+ *               phone:
  *                 type: string
- *                 example: johndoe123
+ *                 example: "123-456-7890"
+ *               email:
+ *                 type: string
+ *                 example: johndoe@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: secret123
+ *               status:
+ *                 type: string
+ *                 example: "active"
+ *
+ *     responses:
+ *       201:
+ *         description: User registered successfully
+ *       400:
+ *         description: Invalid input
+ */
+
+export const Registercontroller = async (req: Request, res: Response) => {
+  const result = await Registerservice(req, res);
+  return result;
+};
+
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     tags: [Auth]
+ *     summary: Login user
+ *     description: login user account
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
  *               email:
  *                 type: string
  *                 example: johndoe@gmail.com
@@ -44,7 +81,9 @@ import { Request, Response } from "express";
  *       400:
  *         description: Invalid input
  */
-export const Registercontroller = async (req: Request, res: Response) => {
-  const result = await Registerservice(req, res);
+
+export const Logincontroller = async (req: Request, res: Response) => {
+  // Call the Loginservice and return its result
+  const result = await Loginservice(req, res);
   return result;
 };

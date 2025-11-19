@@ -6,9 +6,9 @@ import { RoleModel } from "@/model/rolemodel";
 
 export const Registerservice = async (req: Request, res: Response) => {
   try {
-    const { firstName, lastName, userName, email, password } = req.body;
+    const { firstName, lastName, phone, email, password } = req.body;
     const existingUser = await UserModel.findOne({
-      $or: [{ email }, { userName }],
+      $or: [{ email }],
     });
 
     if (existingUser) {
@@ -17,18 +17,13 @@ export const Registerservice = async (req: Request, res: Response) => {
         .json({ message: "User with this email or username already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const customerRole = await RoleModel.findOne({ name: "customer" });
-    if (!customerRole) {
-      return res.status(500).json({ message: "Default role not found" });
-    }
 
     const newUser = new UserModel({
       firstName,
       lastName,
-      userName,
+      phone,
       email,
       password: hashedPassword,
-      role: [customerRole._id],
     });
 
     //save user to datebase
@@ -59,15 +54,16 @@ export const Loginservice = async (req: Request, res: Response) => {
     const token = jwt.sign(
       {
         id: user._id,
-        role: user.role,
+        role: (user as any).role,
         email: user.email,
-        userName: user.userName,
       },
       process.env.JWT_SECRET!,
       { expiresIn: "1h" }
     );
 
-    return res.status(200).json({ message: "Login successful", token });
+    return res
+      .status(200)
+      .json({ message: "Login successful", data: user, token });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
   }

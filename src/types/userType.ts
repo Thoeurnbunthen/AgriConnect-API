@@ -3,8 +3,7 @@ import mongoose, { Document, mongo } from "mongoose";
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
-  userName: string;
-  role: mongoose.Types.ObjectId[];
+  phone?: string;
   email: string;
   password: string;
   status: string;
