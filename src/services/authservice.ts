@@ -2,7 +2,6 @@ import { UserModel } from "@/model/usersmodel";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { RoleModel } from "@/model/rolemodel";
 
 export const Registerservice = async (req: Request, res: Response) => {
   try {

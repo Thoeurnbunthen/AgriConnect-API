@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "typeRoots": ["./src/types", "./node_modules/@types"],
-    "target": "ES6",
-    "module": "CommonJS",
+    "target": "es2017",
+    "module": "commonjs",
     "rootDir": "./src",
     "baseUrl": "./",
     "outDir": "dist",
