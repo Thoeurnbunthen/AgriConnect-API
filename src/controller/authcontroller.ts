@@ -1,5 +1,5 @@
 import { Registerservice, Loginservice } from "@/services/authservice";
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 /**
  * @swagger
  * /auth/register:

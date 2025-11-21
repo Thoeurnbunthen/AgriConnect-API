@@ -5,6 +5,6 @@ import roleRoute from "./roleRoute";
 const router = Router();
 
 router.use("/auth", authRoute);
-router.use("/role", roleRoute);
+router.use("/", roleRoute);
 
 export default router;

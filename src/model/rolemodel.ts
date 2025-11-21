@@ -1,12 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 import { IRole } from "@/types/role";
 
-const roleModel = new Schema<IRole>(
+interface IRoleModel extends IRole {
+  _id: mongoose.Types.ObjectId;
+  userId: mongoose.Types.ObjectId;
+}
+
+const roleSchema = new Schema<IRoleModel>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     name: { type: String, required: true, unique: true }, // e.g., "admin", "farmer", "customer"
+    des: { type: String },
   },
   { timestamps: true }
 );
 
-export const RoleModel = mongoose.model<IRole>("Role", roleModel);
+export const RoleModel = mongoose.model<IRoleModel>("Role", roleSchema);

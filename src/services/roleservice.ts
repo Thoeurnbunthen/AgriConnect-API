@@ -1,11 +1,11 @@
 import { RoleModel } from "@/model/rolemodel";
 import { Request, Response } from "express";
-import { JwtPayload } from "jsonwebtoken";
+// import { JwtPayload } from "jsonwebtoken";
 
 export const createRoleService = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.userId; // Assuming userId is attached to req.user
-    const { name } = req.body;
+    // const userId = req.user?.userId; // Assuming userId is attached to req.user
+    const { name, des } = req.body;
     const existName = await RoleModel.findOne({ name });
 
     if (existName) {
@@ -13,8 +13,8 @@ export const createRoleService = async (req: Request, res: Response) => {
     }
 
     const newRole = new RoleModel({
-      userId,
       name,
+      des,
     });
 
     await newRole.save();

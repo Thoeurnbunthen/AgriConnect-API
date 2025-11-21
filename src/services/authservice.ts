@@ -1,4 +1,6 @@
 import { UserModel } from "@/model/usersmodel";
+import { RoleModel } from "@/model/rolemodel";
+import { UserRoleModel } from "@/model/userRolemodel";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
@@ -23,6 +25,15 @@ export const Registerservice = async (req: Request, res: Response) => {
       phone,
       email,
       password: hashedPassword,
+    });
+    // assign role to user
+    const defaultRole = await RoleModel.findOne({ name: "Customer" });
+    if (!defaultRole) throw new Error("Default role not found");
+
+    // create record in user-role collection
+    await UserRoleModel.create({
+      userId: newUser._id,
+      roleId: defaultRole._id,
     });
 
     //save user to datebase
@@ -50,10 +61,17 @@ export const Loginservice = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
+    // Fetch user role
+    const fetchUserRole = await UserRoleModel.find({
+      userId: user._id,
+    }).populate("roleId");
+    // const roles = fetchUserRole ? [(fetchUserRole.roleId as any).name] : [];
+    const roles = fetchUserRole.map((ur) => (ur.roleId as any).name);
+
     const token = jwt.sign(
       {
         id: user._id,
-        role: (user as any).role,
+        role: roles,
         email: user.email,
       },
       process.env.JWT_SECRET!,
@@ -63,16 +81,6 @@ export const Loginservice = async (req: Request, res: Response) => {
     return res
       .status(200)
       .json({ message: "Login successful", data: user, token });
-  } catch (error) {
-    return res.status(500).json({ message: "Internal server error", error });
-  }
-};
-
-export const logoutService = async (req: Request, res: Response) => {
-  try {
-    // Since JWTs are stateless, we can't truly "log out" a user on the server side.
-    // However, we can instruct the client to delete the token.
-    return res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error", error });
   }
