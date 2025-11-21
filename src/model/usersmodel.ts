@@ -1,9 +1,11 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { IUser } from "@/types/userType";
 
-export interface IUserDocument extends IUser, Document {}
+export interface IUserDocument extends IUser, Document {
+  _id: mongoose.Types.ObjectId;
+}
 
-const UserSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUserDocument>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },

@@ -7,8 +7,6 @@ export interface IUser extends Document {
   email: string;
   password: string;
   status: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface JwtPayloadInput {
