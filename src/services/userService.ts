@@ -62,3 +62,27 @@ export const getAllUsersService = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+export const updateUserService = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id;
+    const updateData = req.body;
+
+    if (updateData.password) {
+      updateData.password = await bcrypt.hash(updateData.password, 10);
+    }
+    const updatedUser = await UserModel.findByIdAndUpdate(userId, updateData, {
+      new: true,
+    }).select("-password"); // Exclude password field
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res
+      .status(200)
+      .json({ message: "User updated successfully", user: updatedUser });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
